@@ -1,5 +1,3 @@
-import TokenTypes  "../token/Types";
-
 import Set         "mo:map/Set";
 
 import Result      "mo:base/Result";
@@ -13,6 +11,8 @@ import Debug       "mo:base/Debug";
 
 import Token       "canister:token";
 
+import ICRC1       "mo:icrc1/ICRC1";
+
 shared({caller = controller}) actor class Airdrop(
   amount_e8s_per_user: Nat,
   allow_self_airdrop: Bool
@@ -22,12 +22,12 @@ shared({caller = controller}) actor class Airdrop(
     #NotAuthorized;
   };
 
-  public type AirdropError = TokenTypes.TransferError or AuthorizationError or {
+  public type AirdropError = ICRC1.TransferError or AuthorizationError or {
     #AlreadySupplied;
     #AirdropOver;
   };
 
-  public type AirdropResult = Result.Result<TokenTypes.TxIndex, AirdropError>;
+  public type AirdropResult = Result.Result<ICRC1.TxIndex, AirdropError>;
 
   stable var _controller          = controller;
   stable var _amount_e8s_per_user = amount_e8s_per_user;
@@ -70,7 +70,7 @@ shared({caller = controller}) actor class Airdrop(
     #ok;
   };
 
-  public shared func getRemainingSupply() : async TokenTypes.Balance {
+  public shared func getRemainingSupply() : async ICRC1.Balance {
     await Token.icrc1_balance_of({ owner = Principal.fromActor(this); subaccount = null; });
   };
 
