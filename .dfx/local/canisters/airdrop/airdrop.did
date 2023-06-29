@@ -1,0 +1,46 @@
+type TxIndex__1 = nat;
+type TxIndex = nat;
+type Timestamp = nat64;
+type Result = 
+ variant {
+   err: AuthorizationError;
+   ok;
+ };
+type Balance__1 = nat;
+type Balance = nat;
+type AuthorizationError = variant {NotAuthorized;};
+type AirdropResult = 
+ variant {
+   err: AirdropError;
+   ok: TxIndex__1;
+ };
+type AirdropError = 
+ variant {
+   AirdropOver;
+   AlreadySupplied;
+   BadBurn: record {min_burn_amount: Balance__1;};
+   BadFee: record {expected_fee: Balance__1;};
+   CreatedInFuture: record {ledger_time: Timestamp;};
+   Duplicate: record {duplicate_of: TxIndex;};
+   GenericError: record {
+                   error_code: nat;
+                   message: text;
+                 };
+   InsufficientFunds: record {balance: Balance__1;};
+   NotAuthorized;
+   TemporarilyUnavailable;
+   TooOld;
+ };
+type Airdrop = 
+ service {
+   airdropSelf: () -> (AirdropResult);
+   airdropUser: (principal) -> (AirdropResult);
+   allowSelfAirdrop: (bool) -> (Result);
+   getAmountPerUser: () -> (nat) query;
+   getController: () -> (principal) query;
+   getRemainingSupply: () -> (Balance);
+   isSelfAirdropAllowed: () -> (bool) query;
+   setAmountPerUser: (nat) -> (Result);
+   setController: (principal) -> (Result);
+ };
+service : (nat, bool) -> Airdrop

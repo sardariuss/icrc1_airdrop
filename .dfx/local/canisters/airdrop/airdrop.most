@@ -1,0 +1,8 @@
+// Version: 1.0.0
+type Entry<K> = (K, Nat32, [var Entry<K>]);
+actor {
+  stable _airdropped_users : (Entry<Principal>, [var Nat32]);
+  stable var _allow_self_airdrop : Bool;
+  stable var _amount_e8s_per_user : Nat;
+  stable var _controller : Principal
+};

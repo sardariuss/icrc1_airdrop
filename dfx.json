@@ -1,0 +1,23 @@
+{
+  "canisters": {
+    "token":{
+      "main": "src/token/main.mo",
+      "type": "motoko"
+    },
+    "airdrop":{
+      "main": "src/airdrop/main.mo",
+      "type": "motoko",
+      "dependencies": [
+        "token"
+      ]
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": "mops sources"
+    }
+  },
+  "output_env_file": ".env",
+  "version": 1
+}
